@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import {
   Box,
@@ -94,6 +95,7 @@ const Banner = () => {
             color: textColor,
           }}
           variant="h4"
+          data-testid="banner-text"
         >
           {quote}
         </Typography>
@@ -148,11 +150,14 @@ const Banner = () => {
 
         {/* Background Color Select */}
         <InputLabel
+          htmlFor="background-select"
           sx={{ mt: 2, fontFamily: "Playfair Display, serif", fontWeight: 800 }}
         >
           Change Background:
         </InputLabel>
         <Select
+          id="background-select"
+          data-testid="background-select"
           sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
           fullWidth
           value={bgColor}
@@ -186,10 +191,15 @@ const Banner = () => {
         </Box>
 
         {/* Font Selection */}
-        <InputLabel sx={{ mt: 2, fontFamily: "Playfair Display, serif" }}>
+        <InputLabel
+          htmlFor="font-select"
+          sx={{ mt: 2, fontFamily: "Playfair Display, serif" }}
+        >
           Choose Font:
         </InputLabel>
         <Select
+          id="font-select"
+          data-testid="font-select"
           sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
           value={font}
           onChange={handleFontChange}
