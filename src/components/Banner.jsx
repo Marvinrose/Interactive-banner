@@ -7,42 +7,34 @@ import {
   MenuItem,
   Button,
   InputLabel,
-  Slider,
   Snackbar,
+  Slider,
 } from "@mui/material";
 
 const Banner = () => {
   const [quote, setQuote] = useState(
     "Great minds discuss ideas; average minds discuss events; small minds discuss people. – Eleanor Roosevelt"
   );
-  const [newQuote, setNewQuote] = useState(""); // Holds input text before updating
+  const [newQuote, setNewQuote] = useState("");
   const [bgColor, setBgColor] = useState("#2c3e50");
-  const [customColor, setCustomColor] = useState("#2c3e50");
   const [font, setFont] = useState("Playfair Display, serif");
   const [bgImage, setBgImage] = useState(null);
   const [textColor, setTextColor] = useState("#ffffff");
-  const [overlayOpacity, setOverlayOpacity] = useState(0.5); // Default overlay opacity
+  const [overlayOpacity, setOverlayOpacity] = useState(0.5);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  // Handles setting the new quote on button click
   const handleUpdateQuote = () => {
     if (newQuote.trim() !== "") {
       setQuote(newQuote);
-      setNewQuote(""); // Clear input field
+      setNewQuote("");
       setOpenSnackbar(true);
     }
   };
 
-  const handleFontChange = (event) => {
-    setFont(event.target.value);
-  };
+  const handleFontChange = (event) => setFont(event.target.value);
+  const handleColorChange = (event) => setBgColor(event.target.value);
+  const handleOpacityChange = (event, value) => setOverlayOpacity(value);
 
-  // Handles background color change
-  const handleColorChange = (event) => {
-    setBgColor(event.target.value);
-  };
-
-  // Handles file upload for background image
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -51,10 +43,7 @@ const Banner = () => {
     }
   };
 
-  // Removes the background image
-  const removeBackgroundImage = () => {
-    setBgImage(null);
-  };
+  const removeBackgroundImage = () => setBgImage(null);
 
   return (
     <div style={{ textAlign: "center", overflow: "hidden" }}>
@@ -75,13 +64,12 @@ const Banner = () => {
           backgroundPosition: "center",
           color: "white",
           fontSize: "24px",
-          transition: "transform 0.3s ease-in-out",
-          overflow: "hidden",
           position: "relative",
+          transition: "transform 0.3s ease-in-out",
           "&:hover": { transform: "scale(1.02)" },
         }}
       >
-        {/* Overlay */}
+        {/* Dynamic Overlay */}
         {bgImage && (
           <Box
             sx={{
@@ -92,16 +80,18 @@ const Banner = () => {
               height: "100%",
               backgroundColor: "rgba(0, 0, 0, 1)",
               opacity: overlayOpacity,
+              transition: "opacity 0.3s ease-in-out",
             }}
           />
         )}
 
         <Typography
           sx={{
-            fontFamily: "Playfair Display, serif",
+            fontFamily: font,
             fontWeight: 800,
             position: "relative",
-            zIndex: 2, // Ensures text is above overlay
+            zIndex: 2,
+            color: textColor,
           }}
           variant="h4"
         >
@@ -112,16 +102,22 @@ const Banner = () => {
       {/* Controls */}
       <Box
         sx={{
-          mt: 4,
           p: 3,
           background: "white",
           borderRadius: 2,
           boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-          display: "inline-block",
+          maxWidth: 700,
+          margin: "auto",
+          paddingBottom: "50px",
+          marginBottom: "100px",
+          marginTop: "30px",
         }}
       >
         <Typography
-          sx={{ fontFamily: "Playfair Display, serif", fontWeight: 800 }}
+          sx={{
+            fontFamily: "Playfair Display, serif",
+            fontWeight: 800,
+          }}
           variant="h6"
         >
           Customize Your Banner
@@ -138,8 +134,13 @@ const Banner = () => {
         />
         <Button
           variant="contained"
-          color="primary"
-          sx={{ mt: 2, width: "100%" }}
+          sx={{
+            mt: 2,
+            width: "100%",
+            backgroundColor: "#1A1A1A",
+            color: "white",
+            "&:hover": { backgroundColor: "#333" },
+          }}
           onClick={handleUpdateQuote}
         >
           Change Quote
@@ -152,11 +153,11 @@ const Banner = () => {
           Change Background:
         </InputLabel>
         <Select
-          sx={{ fontFamily: "'DM Sans', sans-serif" }}
+          sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
           fullWidth
           value={bgColor}
           onChange={handleColorChange}
-          disabled={bgImage} // Disable if an image is set
+          disabled={bgImage}
         >
           <MenuItem value="#2c3e50">Default</MenuItem>
           <MenuItem value="#1abc9c">Teal</MenuItem>
@@ -165,48 +166,9 @@ const Banner = () => {
           <MenuItem value="#f39c12">Orange</MenuItem>
         </Select>
 
-        {/* Custom Color Picker */}
-        <Box sx={{ mt: 2 }}>
-          <InputLabel sx={{ fontFamily: "'DM Sans', sans-serif" }}>
-            Select Custom Color:
-          </InputLabel>
-          <input
-            type="color"
-            value={customColor}
-            onChange={(e) => {
-              setCustomColor(e.target.value);
-              setBgColor(e.target.value);
-            }}
-            style={{
-              width: "100%",
-              height: "40px",
-              border: "none",
-              cursor: "pointer",
-              background: "transparent",
-            }}
-            disabled={bgImage} // Disable if an image is set
-          />
-        </Box>
-
-        {/* Font Selection */}
-        <InputLabel sx={{ mt: 2, fontFamily: "'DM Sans', sans-serif" }}>
-          Choose Font:
-        </InputLabel>
-        <Select
-          sx={{ fontFamily: "'DM Sans', sans-serif" }}
-          fullWidth
-          value={font}
-          onChange={handleFontChange}
-        >
-          <MenuItem value="Playfair Display, serif">Playfair Display</MenuItem>
-          <MenuItem value="Arial, sans-serif">Arial</MenuItem>
-          <MenuItem value="Courier New, monospace">Courier New</MenuItem>
-          <MenuItem value="Georgia, serif">Georgia</MenuItem>
-        </Select>
-
         {/* Text Color Picker */}
         <Box sx={{ mt: 2 }}>
-          <InputLabel sx={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <InputLabel sx={{ fontFamily: "Playfair Display, serif" }}>
             Text Color:
           </InputLabel>
           <input
@@ -223,9 +185,25 @@ const Banner = () => {
           />
         </Box>
 
+        {/* Font Selection */}
+        <InputLabel sx={{ mt: 2, fontFamily: "Playfair Display, serif" }}>
+          Choose Font:
+        </InputLabel>
+        <Select
+          sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
+          value={font}
+          onChange={handleFontChange}
+        >
+          <MenuItem value="Playfair Display, serif">Playfair Display</MenuItem>
+          <MenuItem value="Arial, sans-serif">Arial</MenuItem>
+          <MenuItem value="Courier New, monospace">Courier New</MenuItem>
+          <MenuItem value="Georgia, serif">Georgia</MenuItem>
+          <MenuItem value="Poppins, serif">Poppins</MenuItem>
+        </Select>
+
         {/* Upload Background Image */}
         <Box sx={{ mt: 3 }}>
-          <InputLabel sx={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <InputLabel sx={{ fontFamily: "Playfair Display, serif" }}>
             Upload Background Image:
           </InputLabel>
           <input
@@ -241,10 +219,11 @@ const Banner = () => {
               variant="contained"
               sx={{
                 mt: 1,
-                backgroundColor: "#3498db",
+                width: "100%",
+                backgroundColor: "#1A1A1A",
                 color: "white",
                 fontWeight: 600,
-                "&:hover": { backgroundColor: "#2980b9" },
+                "&:hover": { backgroundColor: "#333" },
               }}
             >
               Choose Image
@@ -252,7 +231,7 @@ const Banner = () => {
           </label>
         </Box>
 
-        {/* Remove Background Image Button */}
+        {/* Remove Background Image */}
         {bgImage && (
           <Button
             variant="contained"
@@ -267,22 +246,21 @@ const Banner = () => {
         {/* Overlay Opacity Slider */}
         {bgImage && (
           <Box sx={{ mt: 3 }}>
-            <InputLabel sx={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Adjust Text Visibility:
+            <InputLabel sx={{ fontFamily: "Playfair Display, serif" }}>
+              Overlay Opacity:
             </InputLabel>
             <Slider
               value={overlayOpacity}
+              onChange={handleOpacityChange}
               min={0}
               max={1}
               step={0.05}
-              onChange={(e, newValue) => setOverlayOpacity(newValue)}
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, color: "#1A1A1A" }}
             />
           </Box>
         )}
       </Box>
 
-      {/* Snackbar Notification */}
       <Snackbar
         open={openSnackbar}
         autoHideDuration={3000}
