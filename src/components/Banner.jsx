@@ -98,6 +98,9 @@ const Banner = () => {
           }}
           variant="h4"
           data-testid="banner-text"
+          role="heading"
+          aria-level="1"
+          aria-live="polite"
         >
           {quote}
         </Typography>
@@ -182,6 +185,7 @@ const Banner = () => {
             type="color"
             value={textColor}
             onChange={(e) => setTextColor(e.target.value)}
+            aria-label="Text color picker"
             style={{
               width: "100%",
               height: "40px",
@@ -200,11 +204,13 @@ const Banner = () => {
           Choose Font:
         </InputLabel>
         <Select
+          aria-label="Font selector"
           id="font-select"
           data-testid="font-select"
           sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
           value={font}
           onChange={handleFontChange}
+          inputProps={{ tabIndex: 0 }}
         >
           <MenuItem value="Playfair Display, serif">Playfair Display</MenuItem>
           <MenuItem value="Arial, sans-serif">Arial</MenuItem>
@@ -268,6 +274,7 @@ const Banner = () => {
               max={1}
               step={0.05}
               sx={{ mt: 1, color: "#1A1A1A" }}
+              aria-label="Background overlay opacity"
             />
           </Box>
         )}
