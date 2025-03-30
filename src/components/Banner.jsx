@@ -83,6 +83,8 @@ const Banner = () => {
               opacity: overlayOpacity,
               transition: "opacity 0.3s ease-in-out",
             }}
+            tabIndex={0}
+            aria-label="Customizable banner displaying a quote"
           />
         )}
 
