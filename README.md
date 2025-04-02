@@ -12,7 +12,10 @@ This project is a **frontend web application** that allows users to customize a 
   - Text color
   - Background image upload
   - Overlay opacity (for uploaded images)
-- Changes update the banner **without requiring a page reload**.
+- Changes update the banner **without requiring a page reload**
+- Accessibility: WCAG 2.1 AA (ARIA labels, keyboard navigation)
+- Feedback: Snackbar confirms quote updates
+- Mobile responsive.
 
 ## Tech Stack
 
