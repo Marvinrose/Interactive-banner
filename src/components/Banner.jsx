@@ -101,6 +101,7 @@ const Banner = () => {
           data-testid="banner-text"
           role="heading"
           aria-level="1"
+          tabIndex={0}
         >
           {quote}
         </Typography>
@@ -309,6 +310,7 @@ const Banner = () => {
         autoHideDuration={3000}
         onClose={() => setOpenSnackbar(false)}
         message="Quote updated successfully!"
+        role="alert"
       />
     </div>
   );

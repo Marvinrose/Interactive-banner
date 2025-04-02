@@ -42,6 +42,12 @@ npm install
 npm run dev
 The app will open in your default browser at http://localhost:5173/
 
+
+## Live Demo
+
+[https://interactive-banner.vercel.app/]
+
+
 ### 4 Running Tests
 
 This project includes unit tests to validate the interactive behavior of the banner.
