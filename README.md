@@ -4,18 +4,27 @@ This project is a **frontend web application** that allows users to customize a 
 
 ## Features
 
-- A **full-width banner** displaying a customizable quote.
-- A **form with controls** to modify:
-  - Banner text
-  - Background color
-  - Font style
-  - Text color
-  - Background image upload
-  - Overlay opacity (for uploaded images)
-- Changes update the banner **without requiring a page reload**
-- Accessibility: WCAG 2.1 AA (ARIA labels, keyboard navigation)
-- Feedback: Snackbar confirms quote updates
-- Mobile responsive.
+- **Banner Content**: Describes my love for intellectual conversations.
+- **Customization**: Adjust background color/image, text color (via color picker with a dropdown fallback), font, and overlay opacity.
+- **Localization**: Supports English and Spanish with dynamic translation.
+- **Responsive Design**: Adapts to mobile screens using Material-UI breakpoints.
+- **Zoom Effect**: Banner zooms in slightly on hover for an engaging effect.
+- **Accessibility (WCAG 2.1 AA)**:
+  - ARIA labels and roles for screen readers.
+  - Keyboard navigation (color picker with a dropdown fallback for text color).
+  - Contrast validation (4.5:1 ratio) with warnings.
+  - Focus states for all interactive elements.
+  - Screen reader-friendly snackbars.
+- **Dismiss Button**: A close icon, positioned for easy access.
+
+
+## Usage
+
+1. Enter a title and body text describing your passion.
+2. Select a language (English or Spanish) to dynamically translate the text.
+3. Customize styles (background, text color, font, image).
+4. Dismiss the banner using the close button in the top-right corner.
+
 
 ## Tech Stack
 
@@ -24,6 +33,7 @@ This project is a **frontend web application** that allows users to customize a 
 - **JavaScript (ES6)**
 - **Git/GitHub** for version control
 - **Jest** for unit testing
+
 
 ## Getting Started
 
@@ -43,9 +53,9 @@ npm run dev
 The app will open in your default browser at http://localhost:5173/
 
 
-## Live Demo
+### Live Demo
 
-[https://interactive-banner.vercel.app/]
+(https://interactive-banner.vercel.app/)
 
 
 ### 4 Running Tests
