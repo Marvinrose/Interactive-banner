@@ -10,28 +10,26 @@ import {
   Snackbar,
   Slider,
   IconButton,
+  FormControl,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-// Simplified contrast ratio calculation ToDo => use a library like 'polished' later.
+// Simplified contrast ratio (TODO => use a proper library like polished for this)
 const getContrastRatio = (color1, color2) => {
   const lum1 = parseInt(color1.slice(1), 16);
   const lum2 = parseInt(color2.slice(1), 16);
   const ratio = (Math.max(lum1, lum2) + 0.05) / (Math.min(lum1, lum2) + 0.05);
-  return ratio >= 4.5; // WCAG 4.5:1 for normal text
+  return ratio >= 4.5;
 };
 
-// Mock translation function ToDo => replace with a real API like Google Translate later
+// Mock translation function (TODO => replace with actual translation API)
+// This is a placeholder function that simulates translation by replacing vowels with accented characters.
 const translateText = async (text, targetLang) => {
-  // After implementing google transalte, this would call Google Translate API
-
-  if (targetLang === "en") return text; // Return original text for English
-
-  return ` ${text.replace(/[aeiou]/g, "áéíóú")}`;
+  if (targetLang === "en") return text;
+  return `${text.replace(/[aeiou]/g, "áéíóú")}`;
 };
 
 const Banner = () => {
-  // Banner content states
   const [title, setTitle] = useState("Passionate About Ideas? Let's Chat!");
   const [body, setBody] = useState(
     "I love communicating with people and engaging in intellectual conversations. Thoughtful discussions help me learn, grow, and connect with different perspectives."
@@ -40,8 +38,6 @@ const Banner = () => {
   const [displayBody, setDisplayBody] = useState(body);
   const [isDismissed, setIsDismissed] = useState(false);
   const [language, setLanguage] = useState("en");
-
-  // Styling states
   const [bgColor, setBgColor] = useState("#2c3e50");
   const [font, setFont] = useState("Playfair Display, serif");
   const [bgImage, setBgImage] = useState(null);
@@ -50,9 +46,8 @@ const Banner = () => {
   const [contrastWarning, setContrastWarning] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [useColorPicker, setUseColorPicker] = useState(true); 
+  const [useColorPicker, setUseColorPicker] = useState(true);
 
-  // Update displayed text whenever title, body, or language changes
   useEffect(() => {
     const updateTranslation = async () => {
       const translatedTitle = await translateText(title, language);
@@ -63,58 +58,62 @@ const Banner = () => {
     updateTranslation();
   }, [title, body, language]);
 
-  // Validate contrast whenever textColor or bgColor changes
   useEffect(() => {
     const effectiveBgColor = bgImage ? "#000000" : bgColor;
     const isContrastValid = getContrastRatio(textColor, effectiveBgColor);
     setContrastWarning(!isContrastValid);
   }, [textColor, bgColor, bgImage]);
 
+  const showSnackbar = (message) => {
+    setSnackbarMessage(message);
+    setOpenSnackbar(true);
+  };
+
   const handleFontChange = (event) => {
     setFont(event.target.value);
-    setSnackbarMessage("Font updated!");
-    setOpenSnackbar(true);
+    showSnackbar("Font updated!");
   };
 
   const handleColorChange = (event) => {
     setBgColor(event.target.value);
-    setSnackbarMessage("Background color updated!");
-    setOpenSnackbar(true);
+    showSnackbar("Background color updated!");
   };
 
   const handleTextColorChange = (event) => {
     setTextColor(event.target.value);
-    setSnackbarMessage("Text color updated!");
-    setOpenSnackbar(true);
+    showSnackbar("Text color updated!");
   };
 
   const handleOpacityChange = (event, value) => {
     setOverlayOpacity(value);
-    setSnackbarMessage("Overlay opacity updated!");
-    setOpenSnackbar(true);
+    showSnackbar("Overlay opacity updated!");
   };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setBgImage(imageUrl);
-      setSnackbarMessage("Background image updated!");
-      setOpenSnackbar(true);
+    if (!file) return;
+    if (!["image/png", "image/jpeg"].includes(file.type)) {
+      showSnackbar("Only PNG/JPEG images are allowed!");
+      return;
     }
+    if (file.size > 5 * 1024 * 1024) {
+      showSnackbar("Image must be under 5MB!");
+      return;
+    }
+    const imageUrl = URL.createObjectURL(file);
+    setBgImage(imageUrl);
+    showSnackbar("Background image updated!");
   };
 
   const removeBackgroundImage = () => {
     setBgImage(null);
-    setSnackbarMessage("Background image removed!");
-    setOpenSnackbar(true);
+    showSnackbar("Background image removed!");
   };
 
   const handleLanguageChange = (event) => {
     const newLang = event.target.value;
     setLanguage(newLang);
-    setSnackbarMessage("Language updated!");
-    setOpenSnackbar(true);
+    showSnackbar("Language updated!");
   };
 
   if (isDismissed) return null;
@@ -146,7 +145,6 @@ const Banner = () => {
         role="banner"
         aria-roledescription="Customizable advertisement banner"
       >
-        {/* Dynamic Overlay */}
         {bgImage && (
           <Box
             sx={{
@@ -160,10 +158,9 @@ const Banner = () => {
               transition: "opacity 0.3s ease-in-out",
             }}
             aria-hidden="true"
+            data-testid="dynamic-overlay"
           />
         )}
-
-        {/* Banner Content */}
         <Box
           sx={{
             zIndex: 2,
@@ -171,6 +168,7 @@ const Banner = () => {
             maxWidth: "90%",
             position: "relative",
           }}
+          data-testid="banner-content"
         >
           <Typography
             variant="h4"
@@ -197,11 +195,9 @@ const Banner = () => {
             {displayBody}
           </Typography>
         </Box>
-
-        {/* Dismiss Button */}
         <IconButton
           onClick={() => setIsDismissed(true)}
-          aria-label="Dismiss banner"
+          aria-label="Dismiss the customizable banner"
           sx={{
             position: "absolute",
             top: 20,
@@ -236,30 +232,26 @@ const Banner = () => {
             fontFamily: "Playfair Display, serif",
             fontWeight: 800,
           }}
-          variant="h6"
+          variant="h5" // Changed from h6 to h5 for heading order
           id="customize-banner-heading"
         >
           Customize Your Banner
         </Typography>
 
         {/* Language Selector */}
-        <InputLabel
-          id="language-select-label"
-          sx={{ mt: 2, fontFamily: "Playfair Display, serif" }}
-        >
-          Language:
-        </InputLabel>
-        <Select
-          id="language-select"
-          value={language}
-          onChange={handleLanguageChange}
-          aria-labelledby="language-select-label"
-          sx={{ width: "100%", mt: 1 }}
-          inputProps={{ tabIndex: 0 }}
-        >
-          <MenuItem value="en">English</MenuItem>
-          <MenuItem value="es">Spanish</MenuItem>
-        </Select>
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <InputLabel id="language-select-label">Language</InputLabel>
+          <Select
+            id="language-select"
+            value={language}
+            label="Language"
+            onChange={handleLanguageChange}
+            aria-labelledby="language-select-label"
+          >
+            <MenuItem value="en">English</MenuItem>
+            <MenuItem value="es">Spanish</MenuItem>
+          </Select>
+        </FormControl>
 
         {/* Title Input */}
         <TextField
@@ -270,10 +262,10 @@ const Banner = () => {
           value={title}
           onChange={(e) => {
             setTitle(e.target.value);
-            setSnackbarMessage("Title updated!");
-            setOpenSnackbar(true);
+            showSnackbar("Title updated!");
           }}
-          inputProps={{ "aria-labelledby": "customize-banner-heading" }}
+          id="banner-title-input"
+          aria-describedby="customize-banner-heading"
         />
 
         {/* Body Input */}
@@ -287,45 +279,37 @@ const Banner = () => {
           value={body}
           onChange={(e) => {
             setBody(e.target.value);
-            setSnackbarMessage("Body updated!");
-            setOpenSnackbar(true);
+            showSnackbar("Body updated!");
           }}
-          inputProps={{ "aria-labelledby": "customize-banner-heading" }}
+          id="banner-body-input"
+          aria-describedby="customize-banner-heading"
         />
 
         {/* Background Color Select */}
-        <InputLabel
-          id="background-select-label"
-          sx={{ mt: 2, fontFamily: "Playfair Display, serif", fontWeight: 800 }}
-        >
-          Change Background:
-        </InputLabel>
-        <Select
-          id="background-select"
-          data-testid="background-select"
-          sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
-          fullWidth
-          value={bgColor}
-          onChange={handleColorChange}
-          disabled={bgImage}
-          aria-labelledby="background-select-label"
-          inputProps={{ tabIndex: 0 }}
-        >
-          <MenuItem value="#2c3e50">Default</MenuItem>
-          <MenuItem value="#1abc9c">Teal</MenuItem>
-          <MenuItem value="#e74c3c">Red</MenuItem>
-          <MenuItem value="#8e44ad">Purple</MenuItem>
-          <MenuItem value="#f39c12">Orange</MenuItem>
-        </Select>
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <InputLabel id="background-select-label">
+            Change Background
+          </InputLabel>
+          <Select
+            id="background-select"
+            data-testid="background-select"
+            value={bgColor}
+            label="Change Background"
+            onChange={handleColorChange}
+            disabled={bgImage}
+            aria-labelledby="background-select-label"
+          >
+            <MenuItem value="#2c3e50">Default</MenuItem>
+            <MenuItem value="#1abc9c">Teal</MenuItem>
+            <MenuItem value="#e74c3c">Red</MenuItem>
+            <MenuItem value="#8e44ad">Purple</MenuItem>
+            <MenuItem value="#f39c12">Orange</MenuItem>
+          </Select>
+        </FormControl>
 
         {/* Text Color Picker with Fallback */}
         <Box sx={{ mt: 2 }}>
-          <InputLabel
-            id="text-color-label"
-            sx={{ fontFamily: "Playfair Display, serif" }}
-          >
-            Text Color:
-          </InputLabel>
+          <InputLabel id="text-color-label">Text Color</InputLabel>
           {useColorPicker ? (
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
               <input
@@ -352,18 +336,20 @@ const Banner = () => {
             </Box>
           ) : (
             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 1 }}>
-              <Select
-                value={textColor}
-                onChange={handleTextColorChange}
-                aria-labelledby="text-color-label"
-                sx={{ width: "100%" }}
-                inputProps={{ tabIndex: 0 }}
-              >
-                <MenuItem value="#ffffff">White</MenuItem>
-                <MenuItem value="#000000">Black</MenuItem>
-                <MenuItem value="#ff0000">Red</MenuItem>
-                <MenuItem value="#00ff00">Green</MenuItem>
-              </Select>
+              <FormControl fullWidth>
+                <Select
+                  value={textColor}
+                  onChange={handleTextColorChange}
+                  aria-labelledby="text-color-label"
+                  label="Text Color"
+                  data-testid="text-color-select"
+                >
+                  <MenuItem value="#ffffff">White</MenuItem>
+                  <MenuItem value="#000000">Black</MenuItem>
+                  <MenuItem value="#ff0000">Red</MenuItem>
+                  <MenuItem value="#00ff00">Green</MenuItem>
+                </Select>
+              </FormControl>
               <Button
                 onClick={() => setUseColorPicker(true)}
                 aria-label="Switch to color picker for text color selection"
@@ -381,36 +367,29 @@ const Banner = () => {
         </Box>
 
         {/* Font Selection */}
-        <InputLabel
-          id="font-select-label"
-          sx={{ mt: 2, fontFamily: "Playfair Display, serif" }}
-        >
-          Choose Font:
-        </InputLabel>
-        <Select
-          id="font-select"
-          data-testid="font-select"
-          sx={{ width: "100%", fontFamily: "'DM Sans', sans-serif" }}
-          value={font}
-          onChange={handleFontChange}
-          aria-labelledby="font-select-label"
-          inputProps={{ tabIndex: 0 }}
-        >
-          <MenuItem value="Playfair Display, serif">Playfair Display</MenuItem>
-          <MenuItem value="Arial, sans-serif">Arial</MenuItem>
-          <MenuItem value="Courier New, monospace">Courier New</MenuItem>
-          <MenuItem value="Georgia, serif">Georgia</MenuItem>
-          <MenuItem value="Poppins, sans-serif">Poppins</MenuItem>
-        </Select>
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <InputLabel id="font-select-label">Choose Font</InputLabel>
+          <Select
+            id="font-select"
+            data-testid="font-select"
+            value={font}
+            label="Choose Font"
+            onChange={handleFontChange}
+            aria-labelledby="font-select-label"
+          >
+            <MenuItem value="Playfair Display, serif">
+              Playfair Display
+            </MenuItem>
+            <MenuItem value="Arial, sans-serif">Arial</MenuItem>
+            <MenuItem value="Courier New, monospace">Courier New</MenuItem>
+            <MenuItem value="Georgia, serif">Georgia</MenuItem>
+            <MenuItem value="Poppins, sans-serif">Poppins</MenuItem>
+          </Select>
+        </FormControl>
 
         {/* Upload Background Image */}
         <Box sx={{ mt: 3 }}>
-          <InputLabel
-            id="upload-bg-label"
-            sx={{ fontFamily: "Playfair Display, serif" }}
-          >
-            Upload Background Image:
-          </InputLabel>
+          <InputLabel id="upload-bg-label">Upload Background Image</InputLabel>
           <input
             accept="image/*"
             type="file"
@@ -438,7 +417,6 @@ const Banner = () => {
           </label>
         </Box>
 
-        {/* Remove Background Image */}
         {bgImage && (
           <Button
             variant="contained"
@@ -451,15 +429,9 @@ const Banner = () => {
           </Button>
         )}
 
-        {/* Overlay Opacity Slider */}
         {bgImage && (
           <Box sx={{ mt: 3 }}>
-            <InputLabel
-              id="overlay-opacity-label"
-              sx={{ fontFamily: "Playfair Display, serif" }}
-            >
-              Overlay Opacity:
-            </InputLabel>
+            <InputLabel id="overlay-opacity-label">Overlay Opacity</InputLabel>
             <Slider
               value={overlayOpacity}
               onChange={handleOpacityChange}
@@ -473,7 +445,6 @@ const Banner = () => {
         )}
       </Box>
 
-      {/* Snackbar */}
       <Snackbar
         open={openSnackbar || contrastWarning}
         autoHideDuration={3000}

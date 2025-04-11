@@ -1,4 +1,8 @@
+# Outreachy Microtask: Frontend Web Application (T388234)
+
 # Interactive Banner Design
+
+## Overview
 
 This project is a **frontend web application** that allows users to customize a **banner** by changing its text, background, font, and images in real-time.
 
@@ -17,14 +21,12 @@ This project is a **frontend web application** that allows users to customize a 
   - Screen reader-friendly snackbars.
 - **Dismiss Button**: A close icon, positioned for easy access.
 
-
 ## Usage
 
 1. Enter a title and body text describing your passion.
 2. Select a language (English or Spanish) to dynamically translate the text.
 3. Customize styles (background, text color, font, image).
 4. Dismiss the banner using the close button in the top-right corner.
-
 
 ## Tech Stack
 
@@ -33,7 +35,7 @@ This project is a **frontend web application** that allows users to customize a 
 - **JavaScript (ES6)**
 - **Git/GitHub** for version control
 - **Jest** for unit testing
-
+- **Vercel** for hosting
 
 ## Getting Started
 
@@ -65,3 +67,7 @@ npm test
 
 
 ```
+
+## Task Reference
+
+[T388234](https://phabricator.wikimedia.org/T388248)
